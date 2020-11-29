@@ -13,6 +13,12 @@ public class Task5 {
         System.out.println("Максимальное значение в массиве: " + findMax(numbers));
         System.out.println("Минимальное значение в массиве: " + findMin(numbers));
 
+        //вариант 2 с использованием метода sort:
+        System.out.println("\nalternatively using sort: ");
+        Arrays.sort(numbers);
+        System.out.println("Max value: " + numbers[numbers.length - 1]);
+        System.out.println("Min value: " + numbers[0]);
+
     }
 
     private static int[] randomArray(int size){
@@ -38,4 +44,5 @@ public class Task5 {
         }
         return min;
     }
+
 }
