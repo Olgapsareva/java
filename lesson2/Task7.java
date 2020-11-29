@@ -9,13 +9,13 @@ import java.util.Arrays;
 
 public class Task7 {
     public static void main(String[] args) {
-        int[] numbers = {1,2,3,4,5,6};
-        final int SHIFT = 8;
+        int[] numbers = {1,2,3,4,5};
+        final int SHIFT = 3;
 
         shiftElements(numbers, SHIFT);
 
         System.out.println(Arrays.toString(numbers));
-        System.out.println("фактическое число итераций цикла " + Math.abs(SHIFT%numbers.length));
+
     }
 
     private static void shiftElements(int[] numArray, int shift) {
