@@ -17,7 +17,7 @@ public class LimitedQuiz {
             "kiwi", "mango", "mushroom", "nut", "olive", "pea", "peanut",
             "pear", "pepper", "pineapple", "pumpkin", "potato"};
 
-    static int tryCount = 3; 
+    static int tryCount = 3;
 
 
     public static void main(String[] args) {
@@ -43,9 +43,7 @@ public class LimitedQuiz {
             gameBoardForPrint = new String(gameBoard);
             System.out.printf(gameBoardForPrint + "%n");
 
-            userAnswer = scanner.next();
-            userAnswer = userAnswer.toLowerCase();
-
+            userAnswer = getAnswer();
 
             if (userAnswer.equals(secretWord)) {
                 System.out.println("Поздравляю, вы угадали!");
@@ -86,6 +84,11 @@ public class LimitedQuiz {
             case 0, 5, 6, 7, 8, 9 -> suffix = "ок";
         }
         return suffix;
+    }
+
+    private static String getAnswer() {
+        String answer = scanner.next();
+        return answer.toLowerCase();
     }
 
     private static void showLetters(char[] gameBoard, String userAnswer, String secretWord) {
