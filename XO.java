@@ -22,8 +22,8 @@ public class XO {
 
     static boolean victoryHuman, victoryAI;
 
-    static int aiRow = -1;
-    static int aiColumn = -1;
+    static int aiRow;
+    static int aiColumn;
     static boolean rowToBlock, columnToBlock, diagonal1ToBlock, diagonal2ToBlock;  //переменные для блокировки хода
     static boolean winningRow, winningColumn, winningDiagonal1, winningDiagonal2; //переменные для оценки возможности победы ИИ
 
@@ -64,7 +64,7 @@ public class XO {
 
     private static void playGame() {
         int count = 0;
-        int threashlod = findThreashlod(); //устанавливаем порог, при котором возникает возможность выиграша
+        int threashold = findThreashold(); //устанавливаем порог, при котором возникает возможность выиграша
 
 
         while (count < SIZE*SIZE) {
@@ -73,16 +73,16 @@ public class XO {
             } else {
                 humanTurn();
                 printGameBoard();
-                victoryHuman = isVictory(humanRow, humanColumn, DOT_HUMAN, threashlod);
+                victoryHuman = isVictory(humanRow, humanColumn, DOT_HUMAN, threashold);
                 count++;
 
                 if(count == SIZE*SIZE || victoryHuman){
                     break;
                 }
 
-                aiTurn(threashlod);
+                aiTurn(threashold);
                 printGameBoard();
-                victoryAI = isVictory(aiRow, aiColumn, DOT_AI, threashlod);
+                victoryAI = isVictory(aiRow, aiColumn, DOT_AI, threashold);
                 count++;
 
             }
@@ -92,7 +92,7 @@ public class XO {
 
     }
 
-    private static int findThreashlod() {
+    private static int findThreashold() {
         int n = -1;
         switch(SIZE){
             case 3,4,5 -> n= 3;
@@ -143,9 +143,9 @@ public class XO {
         }
     }
 
-    private static void aiTurn(int threashlod) {
-        boolean block = anythingToBlock(threashlod); //проверяет, есть ли строки/столбцы/вертикали на которых может выиграть человек, записывет значения таких строк/столбцов/вертикалей в переменные класса
-        boolean ableToWin = ableToWin(threashlod); //проверяет, есть ли строки/столбцы/вертикали на которых может выиграть ИИ, записывет значения аких строк/столбцов/вертикалей в переменные класса
+    private static void aiTurn(int threashold) {
+        boolean block = anythingToBlock(threashold); //проверяет, есть ли строки/столбцы/вертикали на которых может выиграть человек, записывет значения таких строк/столбцов/вертикалей в переменные класса
+        boolean ableToWin = ableToWin(threashold); //проверяет, есть ли строки/столбцы/вертикали на которых может выиграть ИИ, записывет значения аких строк/столбцов/вертикалей в переменные класса
         int[] nextCell;
         do {
             if (ableToWin) {
@@ -169,7 +169,7 @@ public class XO {
     }
 
 
-    private static boolean isVictory(int row, int column, char dot, int threashlod) { //проверяем строку, колонку и 2 диагонали (если стоим на диагонали) на победу
+    private static boolean isVictory(int row, int column, char dot, int threashold) { //проверяем строку, колонку и 2 диагонали (если стоим на диагонали) на победу
 
         boolean victoryDiagonal1 = false;
         boolean victoryDiagonal2 = false;
@@ -177,53 +177,25 @@ public class XO {
         boolean victoryColumn;
 
         if (row == column) {
-            victoryDiagonal1 = checkDiagonal1OnVictory(dot, threashlod);
+            victoryDiagonal1 = checkDiagonal1OnVictory(dot, threashold);
         } else if(row + column == SIZE - 1){
-            victoryDiagonal2 = checkDiagonal2OnVictory(dot, threashlod);
+            victoryDiagonal2 = checkDiagonal2OnVictory(dot, threashold);
         }
 
 
-        victoryRow = checkRowOnVictory(row, dot, threashlod);
-        victoryColumn = checkColumnOnVictory(column, dot, threashlod);
+        victoryRow = checkRowOnVictory(row, dot, threashold);
+        victoryColumn = checkColumnOnVictory(column, dot, threashold);
 
         return victoryRow || victoryColumn || victoryDiagonal1 || victoryDiagonal2;
     }
 
-    private static boolean checkRowOnVictory(int row, char dot, int THREASHLOD) { //победа определяется подсчетом количества знаков
-        int count = 0;
-        for (int i = 0; i < SIZE; i++) {
-            if (map[row][i] == dot) {
-                count++;
-                if(count == THREASHLOD)
-                    return true;
-            } else if(map[row][i] != dot){
-                count = 0;
-            }
-        }
-        return false;
-    }
-
-    private static boolean checkColumnOnVictory(int column, char dot, int threashlod) {
-        int count = 0;
-        for (int i = 0; i < SIZE; i++) {
-            if (map[i][column] == dot) {
-                count++;
-                if(count == threashlod)
-                    return true;
-            } else if(map[i][column] != dot){
-                count = 0;
-            }
-        }
-        return false;
-    }
-
-    private static boolean checkDiagonal1OnVictory(char dot, int threashlod) {
+    private static boolean checkDiagonal1OnVictory(char dot, int threashold) {
         int count = 0;
 
         for (int i = 0; i < SIZE; i++) {
             if (map[i][i] == dot) {
                 count++;
-                if(count == threashlod)
+                if(count == threashold)
                     return true;
             } else if(map[i][i] != dot){
                 count = 0;
@@ -232,12 +204,12 @@ public class XO {
         return false;
     }
 
-    private static boolean checkDiagonal2OnVictory(char dot, int threashlod){
+    private static boolean checkDiagonal2OnVictory(char dot, int threashold){
         int count = 0;
         for (int i = 0, j = SIZE - 1; i < SIZE & j >= 0; i++, j--) {
             if (map[i][j] == dot) {
                 count++;
-                if(count == threashlod)
+                if(count == threashold)
                     return true;
             }else if(map[i][j] != dot){
                 count = 0;
@@ -246,20 +218,45 @@ public class XO {
         return false;
     }
 
-    private static boolean anythingToBlock(int threashlod) { //проверяем, есть ли строка/колонка/диагональ на которой может выиграть человек
-        if (humanRow == humanColumn){
-            diagonal1ToBlock = ifAlmostFilledDiagonal1(DOT_HUMAN, threashlod);
-        } else if(humanRow + humanColumn == SIZE-1){
-            diagonal2ToBlock = ifAlmostFilledDiagonal2(DOT_HUMAN, threashlod);
+    private static boolean checkRowOnVictory(int row, char dot, int threashold) { //победа определяется подсчетом количества знаков
+        int count = 0;
+        for (int i = 0; i < SIZE; i++) {
+            if (map[row][i] == dot) {
+                count++;
+                if(count == threashold)
+                    return true;
+            } else if(map[row][i] != dot){
+                count = 0;
+            }
         }
-        rowToBlock = ifAlmostFilledRow(DOT_HUMAN, humanRow, threashlod);
-        columnToBlock = ifAlmostFilledColumn(DOT_HUMAN,humanColumn, threashlod);
+        return false;
+    }
+
+    private static boolean checkColumnOnVictory(int column, char dot, int threashold) {
+        int count = 0;
+        for (int i = 0; i < SIZE; i++) {
+            if (map[i][column] == dot) {
+                count++;
+                if(count == threashold)
+                    return true;
+            } else if(map[i][column] != dot){
+                count = 0;
+            }
+        }
+        return false;
+    }
+
+    private static boolean anythingToBlock(int threashold) { //проверяем, есть ли строка/колонка/диагональ на которой может выиграть человек
+        diagonal1ToBlock = ifAlmostFilledDiagonal1(DOT_HUMAN, threashold);
+        diagonal2ToBlock = ifAlmostFilledDiagonal2(DOT_HUMAN, threashold);
+        rowToBlock = ifAlmostFilledRow(DOT_HUMAN, humanRow, threashold);
+        columnToBlock = ifAlmostFilledColumn(DOT_HUMAN, humanColumn, threashold);
 
         return diagonal1ToBlock || diagonal2ToBlock || rowToBlock || columnToBlock;
     }
 
 
-    private static boolean ifAlmostFilledDiagonal1(char dot, int threashlod) { //используется и для блокировки и для оценки победы ИИ
+    private static boolean ifAlmostFilledDiagonal1(char dot, int threashold) { //используется и для блокировки и для оценки победы ИИ
         int count = 0;
         int emptySlot = 0;
         for (int i = 0; i < SIZE; i++) {
@@ -271,11 +268,11 @@ public class XO {
                 count--;
             }
         }
-        return count == threashlod-1 && emptySlot > 0; //возврщает если есть есть опасное количество точек подряд и минимум 1 свободное место
+        return count == threashold-1 && emptySlot > 0; //возврщает если есть есть опасное количество точек подряд и минимум 1 свободное место
 
     }
 
-    private static boolean ifAlmostFilledDiagonal2(char dot, int threashlod) { //используется и для блокировки и для оценки победы ИИ
+    private static boolean ifAlmostFilledDiagonal2(char dot, int threashold) { //используется и для блокировки и для оценки победы ИИ
         int count = 0;
         int emptySlot = 0;
         for (int i = 0, j = SIZE - 1; i < SIZE; i++, j--) {
@@ -287,10 +284,10 @@ public class XO {
                 count--;
             }
         }
-        return count == threashlod-1 && emptySlot >0; //возврщает если есть опасное количество точек подряд и минимум 1 свободное место
+        return count == threashold-1 && emptySlot >0; //возврщает если есть опасное количество точек подряд и минимум 1 свободное место
     }
 
-    private static boolean ifAlmostFilledRow(char dot, int row, int threashlod) { //используется и для блокировки и для оценки победы ИИ
+    private static boolean ifAlmostFilledRow(char dot, int row, int threashold) { //используется и для блокировки и для оценки победы ИИ
 
         int count = 0;
         int emptySlot = 0;
@@ -303,11 +300,11 @@ public class XO {
                 count--;
             }
         }
-        return count == threashlod-1 && emptySlot > 0;// возвращает, если есть есть опасное количество точек подряд и минимум 1 свободное место
+        return count == threashold-1 && emptySlot > 0;// возвращает, если есть есть опасное количество точек подряд и минимум 1 свободное место
 
     }
 
-    private static boolean ifAlmostFilledColumn(char dot, int column, int threashlod) { //используется и для блокировки и для оценки победы ИИ
+    private static boolean ifAlmostFilledColumn(char dot, int column, int threashold) { //используется и для блокировки и для оценки победы ИИ
         int count = 0;
         int emptySlot = 0;
         for (int i = 0; i < SIZE; i++) {
@@ -321,23 +318,17 @@ public class XO {
             }
 
         }
-        return count == threashlod-1 && emptySlot > 0; // возвращает, если там есть есть опасное количество точек подряд и минимум 1 свободное место
+        return count == threashold-1 && emptySlot > 0; // возвращает, если там есть есть опасное количество точек подряд и минимум 1 свободное место
 
     }
 
-    private static boolean ableToWin(int threashlod) { //проверяем, есть ли строка/колонка/диагональ, на которой может выиграть ИИ
-        if (aiRow !=-1 && aiColumn !=-1) { //проверяем только в том случае, если это не 1й ход ИИ
-            if (aiRow == aiColumn) {
-                winningDiagonal1 = ifAlmostFilledDiagonal1(DOT_AI, threashlod);
-            } else if(aiRow + aiColumn == SIZE-1){
-                winningDiagonal2 = ifAlmostFilledDiagonal2(DOT_AI, threashlod);
-            }
-            winningRow = ifAlmostFilledRow(DOT_AI, aiRow, threashlod);
-            winningColumn = ifAlmostFilledColumn(DOT_AI, aiColumn, threashlod);
-            return winningRow || winningColumn || winningDiagonal1 || winningDiagonal2;
-        } else {
-            return false;
-        }
+    private static boolean ableToWin(int threashold) { //проверяем, есть ли строка/колонка/диагональ, на которой может выиграть ИИ
+        winningDiagonal1 = ifAlmostFilledDiagonal1(DOT_AI, threashold);
+        winningDiagonal2 = ifAlmostFilledDiagonal2(DOT_AI, threashold);
+        winningRow = ifAlmostFilledRow(DOT_AI, aiRow, threashold);
+        winningColumn = ifAlmostFilledColumn(DOT_AI, aiColumn, threashold);
+        return winningRow || winningColumn || winningDiagonal1 || winningDiagonal2;
+
     }
 
     private static int[] findBestPosToWin() { //найти и вернуть пустую ячейку
@@ -365,7 +356,7 @@ public class XO {
         } else if (columnToBlock) {
             bestPos = findPosInColumn(DOT_HUMAN, humanColumn);
 
-        } else if ( diagonal1ToBlock) {
+        } else if (diagonal1ToBlock) {
             bestPos = findPosInDiagonal1(DOT_HUMAN);
 
         } else if (diagonal2ToBlock) {
@@ -498,15 +489,7 @@ public class XO {
         }
     }
 
-    /*private static void anotherRound() {
-        System.out.printf("%nСыграем ещё раунд? y/n?%n");
-        switch (scanner.next()) {
-            case "yes", "y", "da", "да", "+" -> playGame();
-            case "no", "n", "net", "нет", "-" -> {
-                System.exit(0);
-            }
-        }
-    }*/
+
     }
 
 
