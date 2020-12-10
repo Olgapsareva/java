@@ -239,7 +239,7 @@ public class XO {
                 count++;
                 if(count == threashlod)
                     return true;
-            }else if(map[i][i] != dot){
+            }else if(map[i][j] != dot){
                 count = 0;
             }
         }
@@ -255,7 +255,7 @@ public class XO {
         rowToBlock = ifAlmostFilledRow(DOT_HUMAN, humanRow, threashlod);
         columnToBlock = ifAlmostFilledColumn(DOT_HUMAN,humanColumn, threashlod);
 
-        return diagonal1ToBlock | diagonal2ToBlock | rowToBlock | columnToBlock;
+        return diagonal1ToBlock || diagonal2ToBlock || rowToBlock || columnToBlock;
     }
 
 
@@ -334,7 +334,7 @@ public class XO {
             }
             winningRow = ifAlmostFilledRow(DOT_AI, aiRow, threashlod);
             winningColumn = ifAlmostFilledColumn(DOT_AI, aiColumn, threashlod);
-            return winningRow | winningColumn | winningDiagonal1 | winningDiagonal2;
+            return winningRow || winningColumn || winningDiagonal1 || winningDiagonal2;
         } else {
             return false;
         }
