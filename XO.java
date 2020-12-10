@@ -5,7 +5,7 @@ import java.util.Scanner;
 
 public class XO {
 
-    static final int SIZE = 4;
+    static final int SIZE = 5;
 
     static final char DOT_EMPTY = '.';
     static final char DOT_HUMAN = 'X';
@@ -109,12 +109,12 @@ public class XO {
             humanRow = checkInt();
             System.out.println("введите значение столбца");
             humanColumn = checkInt();
-        } while (!isWithinBounds(humanRow, humanColumn) || !isEmpty(humanRow, humanColumn, true));
+        } while (!isWithinBounds(humanRow, humanColumn) || !isEmptyCell(humanRow, humanColumn, true));
 
         map[humanRow][humanColumn] = DOT_HUMAN;
     }
 
-    private static int checkInt() {
+    private static int checkInt() { //проверяем ввел ли пользовтель число
         if (scanner.hasNextInt()) {
             return scanner.nextInt() - 1;
         }
@@ -122,7 +122,7 @@ public class XO {
         return -1;
     }
 
-    private static boolean isWithinBounds(int row, int column) {
+    private static boolean isWithinBounds(int row, int column) { //проверяем в граница ли поля число
         if ((row < SIZE & row >= 0) && (column < SIZE & column >= 0)) {
             return true;
         } else {
@@ -132,7 +132,7 @@ public class XO {
         }
     }
 
-    private static boolean isEmpty(int row, int column, boolean human) {
+    private static boolean isEmptyCell(int row, int column, boolean human) { //проверяем занята ли ячейка
         if (map[row][column] == DOT_EMPTY) {
             return true;
         } else {
@@ -144,8 +144,8 @@ public class XO {
     }
 
     private static void aiTurn(int threashold) {
-        boolean block = anythingToBlock(threashold); //проверяет, есть ли строки/столбцы/вертикали на которых может выиграть человек, записывет значения таких строк/столбцов/вертикалей в переменные класса
-        boolean ableToWin = ableToWin(threashold); //проверяет, есть ли строки/столбцы/вертикали на которых может выиграть ИИ, записывет значения аких строк/столбцов/вертикалей в переменные класса
+        boolean block = anythingToBlock(threashold); //проверяет, есть ли строки/столбцы/вертикали на которых может выиграть человек, записывет значения в переменные класса
+        boolean ableToWin = ableToWin(threashold); //проверяет, есть ли строки/столбцы/вертикали на которых может выиграть ИИ, записывет значения в переменные класса
         int[] nextCell;
         do {
             if (ableToWin) {
@@ -162,7 +162,7 @@ public class XO {
                 aiColumn = random.nextInt(SIZE);
             }
 
-        } while (!isEmpty(aiRow, aiColumn, false));
+        } while (!isEmptyCell(aiRow, aiColumn, false));
 
         map[aiRow][aiColumn] = DOT_AI;
 
@@ -247,8 +247,18 @@ public class XO {
     }
 
     private static boolean anythingToBlock(int threashold) { //проверяем, есть ли строка/колонка/диагональ на которой может выиграть человек
-        diagonal1ToBlock = ifAlmostFilledDiagonal1(DOT_HUMAN, threashold);
-        diagonal2ToBlock = ifAlmostFilledDiagonal2(DOT_HUMAN, threashold);
+        if (humanRow == humanColumn) {
+            diagonal1ToBlock = ifAlmostFilledDiagonal1(DOT_HUMAN, threashold);
+        } else {
+            diagonal1ToBlock = false;
+        }
+
+        if (humanRow + humanColumn == SIZE-1) {
+            diagonal2ToBlock = ifAlmostFilledDiagonal2(DOT_HUMAN, threashold);
+        } else {
+            diagonal2ToBlock = false;
+        }
+
         rowToBlock = ifAlmostFilledRow(DOT_HUMAN, humanRow, threashold);
         columnToBlock = ifAlmostFilledColumn(DOT_HUMAN, humanColumn, threashold);
 
@@ -323,8 +333,17 @@ public class XO {
     }
 
     private static boolean ableToWin(int threashold) { //проверяем, есть ли строка/колонка/диагональ, на которой может выиграть ИИ
-        winningDiagonal1 = ifAlmostFilledDiagonal1(DOT_AI, threashold);
-        winningDiagonal2 = ifAlmostFilledDiagonal2(DOT_AI, threashold);
+        if (aiRow == aiColumn) {
+            winningDiagonal1 = ifAlmostFilledDiagonal1(DOT_AI, threashold);
+        } else {
+            winningDiagonal1 = false;
+        }
+        if (aiRow + aiColumn == SIZE-1) {
+            winningDiagonal2 = ifAlmostFilledDiagonal2(DOT_AI, threashold);
+        } else {
+            winningDiagonal2 = false;
+        }
+
         winningRow = ifAlmostFilledRow(DOT_AI, aiRow, threashold);
         winningColumn = ifAlmostFilledColumn(DOT_AI, aiColumn, threashold);
         return winningRow || winningColumn || winningDiagonal1 || winningDiagonal2;
