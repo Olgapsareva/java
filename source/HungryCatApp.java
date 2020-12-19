@@ -48,7 +48,7 @@ public class HungryCatApp {
             @Override
             public void run() {
                 feedCats(cats, plate);
-                System.out.println("Task 1 performed on " + new Date());
+                //System.out.println("Task 1 performed on " + new Date());
             }
         };
 
