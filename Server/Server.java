@@ -35,7 +35,7 @@ public class Server{
                 Socket socket = serverSocket.accept();
                 //замеряем время открытия сокета, отсчитываем таймаут от этого момента
                 LocalDateTime calculatedTerminationTime = LocalDateTime.now().plusSeconds(AUTH_TIMEOUT);
-                LOGGER.info(String.format("клиент %s пытается подключиться%n", socket.getInetAddress().getHostName()));
+                LOGGER.info("клиент {} пытается подключиться%n", socket.getInetAddress().getHostName());
                 //передаем время закрытия авторизации клиентхендлеру
                 executorService.execute(new ClientHandler(this, socket, calculatedTerminationTime)); //для каждого нового юзера, свой хэндлер
             }

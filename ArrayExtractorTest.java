@@ -1,19 +1,17 @@
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 
 import java.util.Arrays;
 
 public class ArrayExtractorTest {
 
-    //не работает с @BeforeEach
     /*private static ArrayExtractor arrayExtractor;
 
-    @BeforeEach
-    public void init() {
+    @BeforeAll
+    public static void init() {
         arrayExtractor = new ArrayExtractor();
     }*/
-
 
     @Test
     public void testExtractArrayAfterGivenNumber(){
@@ -33,7 +31,7 @@ public class ArrayExtractorTest {
     }
 
     @Test
-    public void testExtractArrayAfterGivenNumber2(){
+   public void testExtractArrayAfterGivenNumber2(){
         ArrayExtractor arrayExtractor = new ArrayExtractor();
         int i = 4;
         Integer[] nums = {1,5,6,8};
@@ -55,7 +53,7 @@ public class ArrayExtractorTest {
         Integer[] nums = {1,2,4,4,2,3,4,1,7};
         int a = 0;
         int b = 5;
-        Assertions.assertEquals(false, arrayExtractor.checkForNumbers(nums, a,b));
+        Assertions.assertFalse(arrayExtractor.checkForNumbers(nums, a,b));
     }
 
     @Test
@@ -64,7 +62,7 @@ public class ArrayExtractorTest {
         Integer[] nums = {};
         int a = 1;
         int b = 4;
-        Assertions.assertEquals(false, arrayExtractor.checkForNumbers(nums, a,b));
+        Assertions.assertFalse(arrayExtractor.checkForNumbers(nums, a,b));
     }
 
 
