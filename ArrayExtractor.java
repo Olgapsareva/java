@@ -10,20 +10,15 @@
 Написать набор тестов для этого метода (по 3-4 варианта входных данных).*/
 
 
-package lesson6;
-
 import java.util.Arrays;
+import java.util.List;
 
 public class ArrayExtractor {
-    public static void main(String[] args) {
-        Integer[] nums = {1,2,4,4,2,3,4,1,7};
-        //Integer[] nums = {1,2,2,3,0,1,7};
-        Integer[] newNums = extractArrayAfterGivenNumber(nums, 4);
-        System.out.println(Arrays.toString(newNums));
 
-    }
-
-    private static Integer[] extractArrayAfterGivenNumber(Integer[] nums, int i) {
+    public Integer[] extractArrayAfterGivenNumber(Integer[] nums, int i) {
+        if (nums.length == 0){
+            throw new MyRuntimeException("empty list");
+        }
         int lastIndexOf = getLastIndexOf(nums, i);
         if (lastIndexOf != -1) {
             return Arrays.copyOfRange(nums, lastIndexOf+1, nums.length);
@@ -32,7 +27,12 @@ public class ArrayExtractor {
         }
     }
 
-    private static int getLastIndexOf(Integer[] nums, int i) {
+    private int getLastIndexOf(Integer[] nums, int i) {
         return Arrays.asList(nums).lastIndexOf(i);
+    }
+
+    public boolean checkForNumbers(Integer[] nums, int a, int b) {
+        List<Integer> arrAsList = Arrays.asList(nums);
+        return (arrAsList.contains(a) || arrAsList.contains(b));
     }
 }
