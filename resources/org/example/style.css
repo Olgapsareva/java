@@ -1,0 +1,25 @@
+.text-area {
+     -fx-background-color: #e3e3e3;
+     -fx-effect: innershadow(gaussian, grey, 6.0, 0.0, 0.0, 0.0);
+
+}
+
+
+.button {
+    -fx-background-color: #4ddbb0;
+    -fx-effect: dropshadow(gaussian, grey, 3.0, 0.0, 1.0, 1.0);
+    -fx-font-size: 16px;
+    -fx-font-weigth: bold;
+    -fx-text-fill: white;
+    
+}
+
+.button:pressed {
+    -fx-background-color: #339e7e;
+}
+
+.text-field {
+	
+	-fx-effect: innershadow(gaussian, grey, 5.0, 0.0, 0.0, 0.0);
+
+}
